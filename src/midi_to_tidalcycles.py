@@ -530,7 +530,9 @@ def print_tidal_multitrack(_args, tracks_data, n_quanta):
 
         # Add sound and effects
         print(f'     # s "superpiano"')
-        print(f"     # sustain 0.5")
+        # Only add sustain if legato is not being used (legato controls duration)
+        if legatos is None:
+            print(f"     # sustain 0.5")
         print(f"     # gain 0.8")
         pan_val = 0.3 + (i * 0.2) if i < 4 else 0.5
         print(f"     # pan {pan_val}")
