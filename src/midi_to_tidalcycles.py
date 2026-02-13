@@ -494,7 +494,8 @@ def print_tidal_multitrack(_args, tracks_data, n_quanta):
                 print(f'     # amp "{vels_str}"')
 
             if legatos is not None:
-                note_legatos = [x for x in legatos[:, 0]]
+                # Convert to int if whole number (0.0 -> 0, 8.0 -> 8)
+                note_legatos = [int(x) if x == int(x) else x for x in legatos[:, 0]]
                 if _args.consolidate:
                     note_legatos = simplify_repeats(note_legatos)
                 legatos_str = " ".join(str(x) for x in note_legatos)
@@ -519,7 +520,10 @@ def print_tidal_multitrack(_args, tracks_data, n_quanta):
                         vels_str = " ".join(str(x) for x in note_vels)
                         print(f'       # amp "{vels_str}"')
                     if legatos is not None:
-                        note_legatos = [x for x in legatos[:, j]]
+                        # Convert to int if whole number (0.0 -> 0, 8.0 -> 8)
+                        note_legatos = [
+                            int(x) if x == int(x) else x for x in legatos[:, j]
+                        ]
                         if _args.consolidate:
                             note_legatos = simplify_repeats(note_legatos)
                         legatos_str = " ".join(str(x) for x in note_legatos)
