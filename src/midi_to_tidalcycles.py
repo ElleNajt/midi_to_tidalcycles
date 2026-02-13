@@ -593,9 +593,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--resolution",
         "-q",
-        default=4,
+        default=8,
         type=int,
-        help="specify number of quanta per quarter note",
+        help="specify number of quanta per quarter note (default 8 for 32nd note resolution)",
     )
     parser.add_argument(
         "--legato",
