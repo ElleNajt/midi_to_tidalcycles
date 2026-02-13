@@ -213,18 +213,18 @@ def midi_to_multitrack_arrays(
     ticks_per_quanta = pattern.resolution / quanta_per_qn
     ticks_per_beat = pattern.resolution * 4
 
-    # Find total length across all tracks
-    max_cum_ticks = 0
+    # Find total length across all tracks (based on last note, not track end)
+    max_note_end_ticks = 0
     for track in pattern:
         cum_ticks = 0
         for event in track:
             cum_ticks += event.tick
-        max_cum_ticks = max(max_cum_ticks, cum_ticks)
+            # Track the last note-off as the true end
+            if hasattr(event, "pitch"):
+                max_note_end_ticks = max(max_note_end_ticks, cum_ticks)
 
-    pretail_total_beats = max_cum_ticks / float(ticks_per_beat)
-    total_beats = int(np.ceil(pretail_total_beats))
-    real_total_ticks = total_beats * ticks_per_beat
-    n_quanta = int(real_total_ticks / ticks_per_quanta)
+    # Use actual note end, not padded to full beats (avoids trailing silence)
+    n_quanta = int(np.ceil(max_note_end_ticks / ticks_per_quanta))
 
     tracks_data = []
 
